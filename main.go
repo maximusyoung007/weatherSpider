@@ -1,8 +1,7 @@
-package main
+package weatherSpider
 
 import "fmt"
 
 func main() {
-//测试 1tab=4space
-	fmt.Println("Hello world")
+	fmt.Println("hello world")
 }
