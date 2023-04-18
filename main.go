@@ -1,7 +1,11 @@
-package weatherSpider
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"weatherSpider/client"
+)
 
 func main() {
-    fmt.Println("hello world")
+	fmt.Println("hello world")
+	client.Connect("https://news.baidu.com/")
 }
