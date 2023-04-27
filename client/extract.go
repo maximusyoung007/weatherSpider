@@ -2,21 +2,18 @@ package client
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
-func Connect(url string) string {
+func Connect(url string) io.Reader {
 	res, err := http.Get(url)
 	if err != nil {
 		fmt.Print("请求错误", err)
-		return ""
 	}
-	data, err := ioutil.ReadAll(res.Body)
+	//data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Print("数据错误", err)
-		return ""
 	}
-	//fmt.Print(string(data[:10000]))
-	return string(data)
+	return res.Body
 }

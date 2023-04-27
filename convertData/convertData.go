@@ -43,32 +43,4 @@ func StructConvert(s string) []structs.Area {
 	}
 	fmt.Println(time.Since(t))
 	return areaList1
-
-	//json转map再提取area比较慢
-	//t1 := time.Now()
-	//m := make(map[string]map[string]map[string]map[string]string)
-	//for i := 0; i < len(s); i++ {
-	//	if s[i] == '{' {
-	//		s = s[i:]
-	//		break
-	//	}
-	//}
-	//err := json.Unmarshal([]byte(s), &m)
-	//if err != nil {
-	//	fmt.Print("json 解析成map失败", err)
-	//}
-	//for _, v := range m {
-	//	for key, v1 := range v {
-	//		for _, v2 := range v1 {
-	//			if key == v2["NAMECN"] {
-	//				var area structs.Area
-	//				area.AreaId = v2["AREAID"]
-	//				area.NameCN = v2["NAMECN"]
-	//				areaList2 = append(areaList2, area)
-	//			}
-	//		}
-	//	}
-	//}
-	//
-	//fmt.Print(time.Since(t1))
 }
