@@ -3,14 +3,12 @@ package convertData
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 	"weatherSpider/structs"
 )
 
 func StructConvert(s string) []structs.Area {
 	areaList1 := make([]structs.Area, 0)
 
-	t := time.Now()
 	stack := make([]string, 0)
 	level4Saved := false
 	level := 0
@@ -41,6 +39,5 @@ func StructConvert(s string) []structs.Area {
 			}
 		}
 	}
-	fmt.Println(time.Since(t))
 	return areaList1
 }
