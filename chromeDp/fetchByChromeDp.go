@@ -8,11 +8,12 @@ import (
 	"time"
 )
 
+// 处理单个请求
 func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, error) {
 	options := []chromedp.ExecAllocatorOption{
 		chromedp.Flag("headless", true),
 		chromedp.Flag("blink-settings", "imagesEnabled=false"),
-		chromedp.UserAgent(`Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36`),
+		chromedp.UserAgent(`Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36`),
 	}
 
 	//初始化参数，先传一个空的数据
@@ -36,7 +37,7 @@ func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, e
 		chromedp.OuterHTML(sel, &htmlContent, chromedp.ByJSPath),
 	)
 	if err != nil {
-		fmt.Println("Run err : %v\n", err)
+		fmt.Println(err)
 		return "", err
 	}
 	//log.Println(htmlContent)
