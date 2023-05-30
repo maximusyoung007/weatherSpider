@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"weatherSpider/business"
+	"weatherSpider/database"
 	"weatherSpider/structs"
 )
 
@@ -14,4 +15,5 @@ func main() {
 	for _, v := range successList {
 		fmt.Println(v.NameCN)
 	}
+	database.InsertRow(successList)
 }
