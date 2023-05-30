@@ -2,18 +2,23 @@ package main
 
 import (
 	"fmt"
+	"github.com/jasonlvhit/gocron"
 	"weatherSpider/business"
 	"weatherSpider/database"
 	"weatherSpider/structs"
 )
 
-func main() {
-	fmt.Println("hello world")
-	//client.Connect("http://www.weather.com.cn/")
+func task() {
+	fmt.Println("task begin")
+	gocron.Clear()
 	var successList []structs.Area
-	println(business.PreBusiness(&successList))
-	for _, v := range successList {
-		fmt.Println(v.NameCN)
-	}
+	business.PreBusiness(&successList)
 	database.InsertRow(successList)
+}
+
+func main() {
+	s := gocron.NewScheduler()
+	s.Every(30).Minutes().Do(task)
+	<-s.Start()
+	//gocron.Every(1).Hours().Do(task)
 }

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 	"weatherSpider/structs"
 )
 
@@ -28,8 +29,8 @@ func InsertRow(areaList []structs.Area) {
 	initDB()
 	for i := 0; i < len(areaList); i++ {
 		area := areaList[i]
-		sqlStr := "insert into airCondition(areaId, name, airCondition) values (?,?,?) "
-		ret, err := db.Exec(sqlStr, area.AreaId, area.NameCN, area.AirCondition)
+		sqlStr := "insert into airCondition(areaId, name, airCondition, systemTime) values (?,?,?,?) "
+		ret, err := db.Exec(sqlStr, area.AreaId, area.NameCN, area.AirCondition, time.Now())
 		if err != nil {
 			fmt.Printf("insert failed, err:%v\n", err)
 			return

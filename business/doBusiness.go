@@ -29,7 +29,6 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 		}
 	}
 	areaListErr := make([]structs.Area, 0)
-	//areaSuccess := make([]structs.Area, 0)
 	doc, error := goquery.NewDocumentFromReader(client.Fetch(mainUrl))
 	if error != nil {
 		fmt.Print("获取goQuery内容失败")
