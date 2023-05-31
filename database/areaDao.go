@@ -2,18 +2,23 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
+	"weatherSpider/conf"
+	"weatherSpider/logu"
 	"weatherSpider/structs"
 )
 
 var db *sql.DB
+var logger = logu.Logger
+var mysqlConf = &conf.Conf.Mysql
 
 func initDB() (err error) {
-	db, err = sql.Open("mysql", "root:jnhfj@2009@tcp(127.0.0.1:3306)/learnsomething?charset=utf8&parseTime=True")
+	dataSource := mysqlConf.Username + ":" + mysqlConf.Password + "@tcp(127.0.0.1:3306)/" + mysqlConf.Database + "?charset=utf8&parseTime=True"
+	//db, err = sql.Open("mysql", "root:jnhfj@2009@tcp(127.0.0.1:3306)/learnsomething?charset=utf8&parseTime=True")
+	db, err = sql.Open("mysql", dataSource)
 	if err != nil {
-		fmt.Println("数据库链接错误", err)
+		logger.Error("数据库连接错误", err)
 		return err
 	}
 	err = db.Ping()
@@ -32,14 +37,14 @@ func InsertRow(areaList []structs.Area) {
 		sqlStr := "insert into airCondition(areaId, name, airCondition, systemTime) values (?,?,?,?) "
 		ret, err := db.Exec(sqlStr, area.AreaId, area.NameCN, area.AirCondition, time.Now())
 		if err != nil {
-			fmt.Printf("insert failed, err:%v\n", err)
+			logger.Error("insert failed, err:%v\n")
 			return
 		}
 		theID, err := ret.LastInsertId() // 新插入数据的id
 		if err != nil {
-			fmt.Printf("get lastinsert ID failed, err:%v\n", err)
+			logger.Error("get lastinsert ID failed, err:%v\n", err)
 			return
 		}
-		fmt.Printf("insert success, the id is %d.\n", theID)
+		logger.Info("insert success, the id is %d.\n", theID)
 	}
 }

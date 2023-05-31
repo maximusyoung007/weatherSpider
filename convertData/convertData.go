@@ -2,7 +2,7 @@ package convertData
 
 import (
 	"encoding/json"
-	"fmt"
+	"weatherSpider/logu"
 	"weatherSpider/structs"
 )
 
@@ -29,7 +29,7 @@ func StructConvert(s string) []structs.Area {
 				err := json.Unmarshal([]byte(city), &area)
 				areaList1 = append(areaList1, area)
 				if err != nil {
-					fmt.Print("城市序列化失败:", city)
+					logu.Logger.Error("城市序列化失败：", city)
 				}
 				level4Saved = true
 			}

@@ -1,14 +1,13 @@
 package business
 
 import (
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"strconv"
 	"strings"
-	"time"
 	"weatherSpider/chromeDp"
 	"weatherSpider/client"
 	"weatherSpider/convertData"
+	"weatherSpider/logu"
 	"weatherSpider/structs"
 )
 
@@ -16,7 +15,10 @@ import (
 *
 两个areaList,一个是处理完成的，一个是异常的处理
 */
+var log = logu.Logger
+
 func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
+	logger := logu.Logger
 	mainUrl := "http://www.weather.com.cn/"
 	processingList := make([]structs.Area, 0)
 	for i := 0; i < len(areaList); i++ {
@@ -31,13 +33,12 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 	areaListErr := make([]structs.Area, 0)
 	doc, error := goquery.NewDocumentFromReader(client.Fetch(mainUrl))
 	if error != nil {
-		fmt.Print("获取goQuery内容失败")
+		logger.Info("获取goQuery内容失败")
 	}
 	cityUrl, _ := doc.Find("div.w_city").Find("dl").Find("dd").Find("a[title~=上海]").Attr("href")
 
 	oldAreaId := ""
-	fmt.Println("开始时间", time.Now())
-	for i := 0; i < len(processingList); i++ {
+	for i := 0; i < 1; i++ {
 		area := processingList[i]
 		if i == 0 {
 			cityUrl = strings.Replace(cityUrl, "101020100", area.AreaId, 1)
@@ -64,10 +65,7 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 		acn, _ := strconv.Atoi(ac)
 		area.AirCondition = acn
 		*areaSuccess = append(*areaSuccess, area)
-		fmt.Println(acn)
 	}
-	fmt.Println("结束时间", time.Now())
-	fmt.Println(len(*areaSuccess), "   ", len(areaListErr))
 	if len(areaListErr) > 0 {
 		return DoBusiness(areaSuccess, areaListErr)
 	} else {
@@ -76,6 +74,7 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 }
 
 func PreBusiness(successList *[]structs.Area) string {
+	log.Info("business开始--------------------------------------------------------------")
 	cityJs := "https://j.i8tq.com/weather2020/search/city.js"
 	citys := client.FetchString(cityJs)
 	areaList := convertData.StructConvert(citys)

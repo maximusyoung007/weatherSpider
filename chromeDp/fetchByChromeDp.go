@@ -2,10 +2,10 @@ package chromeDp
 
 import (
 	"context"
-	"fmt"
 	"github.com/chromedp/chromedp"
 	"log"
 	"time"
+	"weatherSpider/logu"
 )
 
 // 处理单个请求
@@ -37,10 +37,9 @@ func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, e
 		chromedp.OuterHTML(sel, &htmlContent, chromedp.ByJSPath),
 	)
 	if err != nil {
-		fmt.Println(err)
+		logu.Logger.Error(err)
 		return "", err
 	}
-	//log.Println(htmlContent)
 
 	return htmlContent, nil
 }
