@@ -2,9 +2,12 @@ package convertData
 
 import (
 	"encoding/json"
+	"github.com/sirupsen/logrus"
 	"weatherSpider/logu"
 	"weatherSpider/structs"
 )
+
+var log = &logu.Logger
 
 func StructConvert(s string) []structs.Area {
 	areaList1 := make([]structs.Area, 0)
@@ -29,7 +32,10 @@ func StructConvert(s string) []structs.Area {
 				err := json.Unmarshal([]byte(city), &area)
 				areaList1 = append(areaList1, area)
 				if err != nil {
-					logu.Logger.Error("城市序列化失败：", city)
+					(*log).WithFields(logrus.Fields{
+						"error": err,
+						"city":  city,
+					}).Error("城市序列化失败")
 				}
 				level4Saved = true
 			}

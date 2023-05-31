@@ -2,6 +2,7 @@ package business
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
 	"weatherSpider/chromeDp"
@@ -15,10 +16,9 @@ import (
 *
 两个areaList,一个是处理完成的，一个是异常的处理
 */
-var log = logu.Logger
+var log = &logu.Logger
 
 func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
-	logger := logu.Logger
 	mainUrl := "http://www.weather.com.cn/"
 	processingList := make([]structs.Area, 0)
 	for i := 0; i < len(areaList); i++ {
@@ -33,7 +33,7 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 	areaListErr := make([]structs.Area, 0)
 	doc, error := goquery.NewDocumentFromReader(client.Fetch(mainUrl))
 	if error != nil {
-		logger.Info("获取goQuery内容失败")
+		(*log).WithFields(logrus.Fields{"error": error}).Info("获取goQuery内容失败")
 	}
 	cityUrl, _ := doc.Find("div.w_city").Find("dl").Find("dd").Find("a[title~=上海]").Attr("href")
 
@@ -74,7 +74,6 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 }
 
 func PreBusiness(successList *[]structs.Area) string {
-	log.Info("business开始--------------------------------------------------------------")
 	cityJs := "https://j.i8tq.com/weather2020/search/city.js"
 	citys := client.FetchString(cityJs)
 	areaList := convertData.StructConvert(citys)
