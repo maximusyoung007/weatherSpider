@@ -77,6 +77,5 @@ func PreBusiness(successList *[]structs.Area) string {
 	cityJs := "https://j.i8tq.com/weather2020/search/city.js"
 	citys := client.FetchString(cityJs)
 	areaList := convertData.StructConvert(citys)
-	//var areaSuccess []structs.Area
 	return DoBusiness(successList, areaList)
 }

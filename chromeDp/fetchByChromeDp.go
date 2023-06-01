@@ -41,5 +41,8 @@ func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, e
 		return "", err
 	}
 
+	//每次请求完成后关闭context
+	chromedp.Cancel(timeoutCtx)
+
 	return htmlContent, nil
 }
