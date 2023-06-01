@@ -22,7 +22,7 @@ func main() {
 	log := logu.Logger
 	log.Info("-----------------------------定时任务开始-----------------------------")
 	s := gocron.NewScheduler()
-	s.Every(20).Seconds().Do(task)
+	s.Every(30).Minutes().Do(task)
 	<-s.Start()
 	log.Info("-----------------------------定时任务结束-----------------------------")
 }
