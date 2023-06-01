@@ -10,19 +10,19 @@ import (
 )
 
 func task() {
+	log := logu.Logger
+	log.Info("-----------------------------定时任务开始-----------------------------")
 	gocron.Clear()
 	var successList []structs.Area
 	business.PreBusiness(&successList)
 	database.InsertRow(successList)
+	log.Info("-----------------------------定时任务结束-----------------------------")
 }
 
 func main() {
 	conf.ConfigInit()
 	logu.LogInit()
-	log := logu.Logger
-	log.Info("-----------------------------定时任务开始-----------------------------")
 	s := gocron.NewScheduler()
-	s.Every(30).Minutes().Do(task)
+	s.Every(30).Seconds().Do(task)
 	<-s.Start()
-	log.Info("-----------------------------定时任务结束-----------------------------")
 }
