@@ -20,8 +20,11 @@ func task() {
 }
 
 func main() {
+	log := logu.Logger
+	log.Info("----------------------------程序启动--------------------------")
 	conf.ConfigInit()
 	logu.LogInit()
+	log.Info("-----------------------------配置加载完成--------------------------------------")
 	s := gocron.NewScheduler()
 	s.Every(30).Minutes().Do(task)
 	<-s.Start()
