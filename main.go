@@ -23,6 +23,6 @@ func main() {
 	conf.ConfigInit()
 	logu.LogInit()
 	s := gocron.NewScheduler()
-	s.Every(30).Seconds().Do(task)
+	s.Every(30).Minutes().Do(task)
 	<-s.Start()
 }

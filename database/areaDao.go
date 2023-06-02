@@ -15,7 +15,7 @@ var logger = &logu.Logger
 var mysqlConf = &conf.Conf.Mysql
 
 func initDB() (err error) {
-	dataSource := mysqlConf.Username + ":" + mysqlConf.Password + "@tcp(127.0.0.1:3306)/" + mysqlConf.Database + "?charset=utf8&parseTime=True"
+	dataSource := mysqlConf.Username + ":" + mysqlConf.Password + "@tcp(" + mysqlConf.Ip + ":3306)/" + mysqlConf.Database + "?parseTime=true&loc=Local"
 	db, err = sql.Open("mysql", dataSource)
 	if err != nil {
 		(*logger).WithFields(logrus.Fields{"error": err}).Error("数据库连接错误")
@@ -34,7 +34,7 @@ func InsertRow(areaList []structs.Area) {
 	initDB()
 	for i := 0; i < len(areaList); i++ {
 		area := areaList[i]
-		sqlStr := "insert into airCondition(areaId, name, airCondition, systemTime) values (?,?,?,?) "
+		sqlStr := "insert into weather(areaId, name, airCondition, systemTime) values (?,?,?,?) "
 		ret, err := db.Exec(sqlStr, area.AreaId, area.NameCN, area.AirCondition, time.Now())
 		if err != nil {
 			(*logger).WithFields(logrus.Fields{"error": err}).Error("insert failed")

@@ -11,6 +11,7 @@ type Log struct {
 }
 
 type Mysql struct {
+	Ip       string
 	Username string
 	Password string
 	Database string

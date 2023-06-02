@@ -38,7 +38,7 @@ func DoBusiness(areaSuccess *[]structs.Area, areaList []structs.Area) string {
 	cityUrl, _ := doc.Find("div.w_city").Find("dl").Find("dd").Find("a[title~=上海]").Attr("href")
 
 	oldAreaId := ""
-	for i := 0; i < 1; i++ {
+	for i := 0; i < len(processingList); i++ {
 		area := processingList[i]
 		if i == 0 {
 			cityUrl = strings.Replace(cityUrl, "101020100", area.AreaId, 1)
