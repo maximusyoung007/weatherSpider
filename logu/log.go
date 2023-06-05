@@ -23,7 +23,7 @@ func LogInit() {
 		path+".%Y%m%d%H%M",
 		rotatelogs.WithLinkName(path),
 		rotatelogs.WithMaxAge(time.Duration(72)*time.Hour),
-		rotatelogs.WithRotationSize(1024),
+		rotatelogs.WithRotationSize(64*1024*1024),
 	)
 	//同时写到终端和文件
 	fileAndStdoutWriter := io.MultiWriter(os.Stdout, writer)

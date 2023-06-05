@@ -37,6 +37,7 @@ func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, e
 		chromedp.OuterHTML(sel, &htmlContent, chromedp.ByJSPath),
 	)
 	if err != nil {
+		chromedp.Cancel(timeoutCtx)
 		logu.Logger.Error(err)
 		return "", err
 	}

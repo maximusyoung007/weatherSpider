@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/jasonlvhit/gocron"
+	"github.com/sirupsen/logrus"
 	"weatherSpider/business"
 	"weatherSpider/conf"
 	"weatherSpider/database"
@@ -9,23 +10,24 @@ import (
 	"weatherSpider/structs"
 )
 
+var log = &logu.Logger
+var co = &conf.Conf
+
 func task() {
-	log := logu.Logger
-	log.Info("-----------------------------定时任务开始-----------------------------")
+	(*log).Info("-----------------------------定时任务开始-----------------------------")
 	gocron.Clear()
 	var successList []structs.Area
 	business.PreBusiness(&successList)
 	database.InsertRow(successList)
-	log.Info("-----------------------------定时任务结束-----------------------------")
+	(*log).Info("-----------------------------定时任务结束-----------------------------")
 }
 
 func main() {
-	log := logu.Logger
-	log.Info("----------------------------程序启动--------------------------")
 	conf.ConfigInit()
 	logu.LogInit()
-	log.Info("-----------------------------配置加载完成--------------------------------------")
+	(*log).WithFields(logrus.Fields{"日志文件名": co.Log.FileName, "日志文件路径": co.Log.FilePath}).
+		Info("-----------------------------配置加载完成--------------------------------------")
 	s := gocron.NewScheduler()
-	s.Every(30).Minutes().Do(task)
+	s.Every(60).Minutes().Do(task)
 	<-s.Start()
 }
