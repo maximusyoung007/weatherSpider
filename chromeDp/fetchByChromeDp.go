@@ -2,7 +2,9 @@ package chromeDp
 
 import (
 	"context"
+	"fmt"
 	"github.com/chromedp/chromedp"
+	"github.com/sirupsen/logrus"
 	"log"
 	"time"
 	"weatherSpider/logu"
@@ -36,14 +38,40 @@ func GetHttpHtmlContent(url string, selector string, sel interface{}) (string, e
 		chromedp.WaitVisible(selector),
 		chromedp.OuterHTML(sel, &htmlContent, chromedp.ByJSPath),
 	)
-	if err != nil {
+
+	select {
+	case <-timeoutCtx.Done(): // 因为ctx带超时参数，当时间期限到了之后就会走到这里退出协程
+		//if err != nil {
+		//fmt.Errorf("请求异常", err)
+		//e := chromedp.Cancel(timeoutCtx)
+		//t, _ := timeoutCtx.Deadline()
+		//logu.Logger.WithFields(logrus.Fields{"time": t})
+		//cancel()
+		//logu.Logger.WithFields(logrus.Fields{"info": "关闭context异常"}).Error(e)
+
+		logu.Logger.WithFields(logrus.Fields{"定位": "chromeDp请求异常"}).Error(err)
+
+		//}
+		fmt.Println("Done. ", time.Now().Format("2006-01-02 15:04:05"))
 		chromedp.Cancel(timeoutCtx)
-		logu.Logger.Error(err)
+		cancel()
+		return "", err
+
+	default: // 协程循环执行for，当ctx.Done()无信号时总是走到Default分支
+		//fmt.Println("case default ", time.Now().Format("2006-01-02 15:04:05"))
+		//time.Sleep(time.Second)
+
+	}
+
+	if err != nil {
+		//chromedp.Cancel(timeoutCtx)
+		//logu.Logger.WithFields(logrus.Fields{"定位": "chromeDp请求异常"}).Error(err)
 		return "", err
 	}
 
 	//每次请求完成后关闭context
 	chromedp.Cancel(timeoutCtx)
+	//cancel()
 
 	return htmlContent, nil
 }

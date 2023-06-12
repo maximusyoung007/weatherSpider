@@ -28,6 +28,6 @@ func main() {
 	(*log).WithFields(logrus.Fields{"日志文件名": co.Log.FileName, "日志文件路径": co.Log.FilePath}).
 		Info("-----------------------------配置加载完成--------------------------------------")
 	s := gocron.NewScheduler()
-	s.Every(60).Minutes().Do(task)
+	s.Every(4).Minutes().Do(task)
 	<-s.Start()
 }
