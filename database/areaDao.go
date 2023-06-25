@@ -50,3 +50,25 @@ func InsertRow(areaList []structs.Area) {
 		(*logger).WithFields(logrus.Fields{"id": theID}).Info("insert success")
 	}
 }
+
+func GetRow() []structs.Area {
+	initDB()
+	areaList := make([]structs.Area, 0)
+	sqlStr := "select name, areaId, ROUND(avg(airCondition), 2) avg from weather group by name order by avg(airCondition)"
+	rows, err := db.Query(sqlStr)
+	if err != nil {
+		(*logger).Error("selected failed")
+		return []structs.Area{}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var a structs.Area
+		err := rows.Scan(&a.NameCN, &a.AreaId, &a.AvgAir)
+		if err != nil {
+			(*logger).Error("scan failed")
+			return []structs.Area{}
+		}
+		areaList = append(areaList, a)
+	}
+	return areaList
+}

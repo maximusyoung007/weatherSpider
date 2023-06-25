@@ -1,8 +1,9 @@
 log:
-    filename:
-    logLevel:
-    filePath:
+    filename: weatherSpider.log
+    logLevel: debug
+    filePath: D:\logs\weatherSpider\
 mysql:
-    username:
-    password:
-    database: 
+    ip: 123.207.201.195
+    username: root
+    password: jnhfj@2009
+    database: citys
